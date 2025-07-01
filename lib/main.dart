@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:router_test/A_detail.dart';
-import 'package:router_test/screenA.dart';
-import 'package:router_test/screenB.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +29,12 @@ final router = GoRouter(
         return Scaffold(
           appBar: AppBar(
             title: const Text('GoRouter'),
-            leading: context.canPop() ? BackButton() : null,
+            leading:
+                navigationShell.shellRouteContext.navigatorKey.currentContext
+                            ?.canPop() ??
+                        false
+                    ? BackButton()
+                    : Icon(Icons.question_mark_rounded),
           ),
           body: navigationShell,
           bottomNavigationBar: BottomNavigationBar(
@@ -71,3 +73,44 @@ final router = GoRouter(
     ),
   ],
 );
+
+class ScreenA extends StatelessWidget {
+  const ScreenA({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Center(child: Text('Screen A')),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              context.push('/a/detail');
+            },
+            child: const Text('Go to detail'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ScreenB extends StatelessWidget {
+  const ScreenB({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Screen B'));
+  }
+}
+
+class ScreenADetail extends StatelessWidget {
+  const ScreenADetail({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Screen A Detail'));
+  }
+}
